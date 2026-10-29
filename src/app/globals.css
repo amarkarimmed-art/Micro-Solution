@@ -1,0 +1,98 @@
+@import "./fonts.css";
+@import "tailwindcss";
+
+:root {
+  /* Charte officielle Nomira (Obligatoire) */
+  --color-primary: #1A2838;    /* titres, textes, en-tête */
+  --color-brand: #3A5C8A;      /* boutons secondaires, liens */
+  --color-brand-dark: #405C82; /* survols, bordures */
+  --color-brand-light: #8FB0DC;/* fonds de section, icônes, accents doux */
+  --color-accent: #ED7410;     /* boutons d'action principaux */
+  --color-accent-light: #FFA23C;/* accents, surlignages, badges */
+  --color-footer: #131B24;     /* fond du pied de page */
+  --color-white: #FFFFFF;      /* fond principal */
+
+  /* Polices officielles Nomira */
+  --font-heading: 'Grotesk', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'InterN', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@theme {
+  --color-primary: #1A2838;
+  --color-brand: #3A5C8A;
+  --color-brand-dark: #405C82;
+  --color-brand-light: #8FB0DC;
+  --color-accent: #ED7410;
+  --color-accent-light: #FFA23C;
+  --color-footer: #131B24;
+  --color-white: #FFFFFF;
+
+  --font-heading: 'Grotesk', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'InterN', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  color: var(--color-primary);
+  background-color: var(--color-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* Utilitaires de contraste et accessibilité */
+.btn-primary {
+  background-color: var(--color-accent);
+  color: #FFFFFF !important;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-primary:hover {
+  background-color: #d86507;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(237, 116, 16, 0.25);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-brand);
+  border: 1.5px solid var(--color-brand);
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-secondary:hover {
+  background-color: rgba(58, 92, 138, 0.08);
+  border-color: var(--color-brand-dark);
+  color: var(--color-brand-dark);
+}
+
+/* Badge avec contraste garanti */
+.badge-accent {
+  background-color: rgba(255, 162, 60, 0.15);
+  color: var(--color-primary);
+  border: 1px solid rgba(255, 162, 60, 0.4);
+  font-weight: 600;
+}
