@@ -1,98 +1,139 @@
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Zap, Users, ArrowRight } from "lucide-react";
 
 const STEPS = [
   {
     step: "01",
-    title: "Diagnostic chiffré (30 min)",
-    desc: "Échange direct pour isoler votre tâche la plus chronophage. Nous quantifions le coût de la friction et validons l'opportunité d'une micro-solution.",
-    duration: "Gratuit & sans engagement",
+    duration: "30 min",
+    title: "Diagnostic chiffré",
+    description:
+      "Échange direct pour isoler votre tâche la plus chronophage. Nous quantifions le coût de la friction et validons l'opportunité.",
+    statusText: "100% Gratuit",
+    isCore: false,
   },
   {
     step: "02",
+    duration: "Sous 24h",
     title: "Cadrage à prix fixe",
-    desc: "Un devis forfaitaire ferme accompagné d'un périmètre technique précis sur 1 page. Aucun dépassement possible, aucun coût masqué.",
-    duration: "Validation sous 24h",
+    description:
+      "Un devis forfaitaire ferme accompagné d'un périmètre technique précis sur 1 page. Aucun dépassement possible, aucun coût masqué.",
+    statusText: "Prix verrouillé",
+    isCore: false,
   },
   {
     step: "03",
-    title: "Déploiement en 4 jours",
-    desc: "Conception et programmation sur-mesure de votre micro-solution. Nous nous branchons sur vos flux actuels (Excel, mails, WhatsApp, ERP).",
-    duration: "4 jours ouvrés",
+    duration: "4 jours",
+    title: "Déploiement agile",
+    description:
+      "Conception et programmation sur-mesure. Nous nous branchons directement sur vos flux actuels (Excel, mails, WhatsApp, ERP).",
+    statusText: "Délai contractuel",
+    isCore: true,
   },
   {
     step: "04",
-    title: "Mise en service & Formation",
-    desc: "Déploiement effectif auprès de vos équipes. Une session de prise en main de 45 minutes suffit : vos collaborateurs sont immédiatement autonomes.",
-    duration: "Immédiat",
+    duration: "45 minutes",
+    title: "Mise en service & Prise en main",
+    description:
+      "Déploiement effectif auprès des équipes. Une session de 45 minutes suffit : vos collaborateurs sont immédiatement opérationnels.",
+    statusText: "Autonomie totale",
+    isCore: false,
   },
   {
     step: "05",
+    duration: "Garantie",
     title: "Suivi & Garantie intégrale",
-    desc: "Vérification des gains en conditions réelles, ajustements ergonomiques et garantie de fonctionnement complet incluse.",
-    duration: "Garantie incluse",
+    description:
+      "Vérification des gains en conditions réelles, ajustements ergonomiques et garantie de fonctionnement complet incluse.",
+    statusText: "Livrable garanti",
+    isCore: false,
   },
 ];
 
 export default function Parcours() {
   return (
-    <section id="parcours" className="py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#3A5C8A] mb-3">
-            Méthode & Calendrier
-          </h2>
-          <p className="text-2xl sm:text-4xl font-bold text-[#1A2838] tracking-tight mb-4">
+    <section id="parcours" className="w-full py-16 lg:py-24 bg-[#F7FAFE]">
+      <div className="max-w-[1140px] mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* En-tête */}
+        <div className="max-w-2xl mx-auto text-center mb-14">
+          <span className="text-xs uppercase tracking-widest text-[#ED7410] font-semibold block mb-2">
+            Méthode &amp; Calendrier
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#1A2838] tracking-tight">
             Du problème résolu en 5 étapes limpides
-          </p>
-          <p className="text-base sm:text-lg text-[#1A2838]/80 leading-relaxed">
-            Pas de tunnel de réunion de six mois. Une démarche courte, pragmatique et focalisée sur
-            le résultat économique concret pour votre entreprise.
+          </h2>
+          <p className="mt-3 text-sm sm:text-base text-[#405C82] leading-relaxed">
+            Pas de tunnel de réunion de six mois. Une démarche courte, pragmatique et focalisée sur le résultat économique concret pour votre entreprise.
           </p>
         </div>
 
         {/* Grille des 5 étapes */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 relative">
-          {STEPS.map((item, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {STEPS.map((item) => (
             <div
               key={item.step}
-              className="relative bg-white rounded-xl p-5 sm:p-6 border border-[#405C82]/15 shadow-sm hover:border-[#3A5C8A]/40 transition-all flex flex-col justify-between group"
+              className={`bg-white p-5 rounded-xl border flex flex-col justify-between relative transition-all duration-200 ${
+                item.isCore
+                  ? "border-2 border-[#ED7410] shadow-sm"
+                  : "border-[#E2E9F3] hover:border-[#FFA23C]"
+              }`}
             >
-              {/* En-tête de carte avec numéro et pastille */}
+              {item.isCore && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-[#ED7410] text-white text-[10px] font-semibold uppercase tracking-wider">
+                  Cœur Nomira
+                </div>
+              )}
+
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-bold text-[#3A5C8A] tracking-tight">
+                  <span className="text-xl sm:text-2xl font-bold text-[#ED7410]">
                     {item.step}
                   </span>
-                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-[#8FB0DC]/20 text-[#1A2838]">
+                  <span
+                    className={`px-2 py-0.5 text-[11px] rounded font-semibold ${
+                      item.isCore
+                        ? "bg-[#ED7410] text-white"
+                        : "bg-[#FFF6EA] text-[#ED7410]"
+                    }`}
+                  >
                     {item.duration}
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-[#1A2838] mb-2 leading-snug">
+                <h3 className="text-sm sm:text-base font-bold text-[#1A2838] mb-2 leading-snug">
                   {item.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-[#1A2838]/75 leading-relaxed">
-                  {item.desc}
+                <p className="text-xs sm:text-sm text-[#405C82] leading-snug">
+                  {item.description}
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-gray-100 flex items-center gap-1.5 text-xs font-semibold text-[#ED7410]">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Livrable garanti</span>
+              <div className="mt-6 pt-3 border-t border-[#E2E9F3] flex items-center justify-between text-[12px] font-medium text-[#1D9E75]">
+                <span className="flex items-center gap-1">
+                  {item.isCore ? (
+                    <Zap className="w-3.5 h-3.5 text-[#ED7410]" />
+                  ) : item.step === "04" ? (
+                    <Users className="w-3.5 h-3.5 text-[#3A5C8A]" />
+                  ) : (
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                  )}
+                  <span className={item.isCore ? "text-[#ED7410]" : item.step === "04" ? "text-[#3A5C8A]" : "text-[#1D9E75]"}>
+                    {item.statusText}
+                  </span>
+                </span>
               </div>
             </div>
           ))}
         </div>
 
-        {/* CTA Intermédiaire */}
-        <div className="mt-14 text-center">
+        {/* CTA d'action */}
+        <div className="mt-12 text-center">
           <a
             href="#contact"
-            className="btn-primary px-8 py-3.5 text-base font-semibold shadow-md inline-flex items-center gap-2"
+            className="inline-flex items-center gap-2 bg-[#ED7410] hover:bg-[#d86507] active:bg-[#c55e0b] text-white font-semibold text-sm px-6 py-3 rounded-lg shadow-sm transition-all duration-200 hover:-translate-y-0.5"
           >
-            Lancer un diagnostic sans frais
+            <span>Lancer un diagnostic sans frais</span>
             <ArrowRight className="w-4 h-4" />
           </a>
-          <p className="mt-3 text-xs text-[#405C82]">
+          <p className="text-xs text-[#6784B0] mt-2">
             30 minutes en visio ou par téléphone · Aucune carte bancaire requise
           </p>
         </div>
@@ -100,4 +141,3 @@ export default function Parcours() {
     </section>
   );
 }
-

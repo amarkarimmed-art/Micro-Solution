@@ -1,14 +1,14 @@
-import { Target, Lock, Code2, Award } from "lucide-react";
+import { Brain, Receipt, Code2, Award } from "lucide-react";
 
 const PILLARS = [
   {
-    icon: Target,
+    icon: Brain,
     title: "Maîtrise des flux métiers",
     description:
       "Nous ne parlons pas en acronymes technologiques abstraits. Nous analysons vos factures, vos agendas, vos fichiers Excel et résolvons le nœud opérationnel qui freine votre journée.",
   },
   {
-    icon: Lock,
+    icon: Receipt,
     title: "Forfait fixe et sans aléa",
     description:
       "Pas de tarif journalier qui s'étire. Chaque intervention Nomira fait l'objet d'un montant arrêté à l'avance. Ce qui a été convenu est exactement ce qui est facturé.",
@@ -29,18 +29,19 @@ const PILLARS = [
 
 export default function Pourquoi() {
   return (
-    <section id="pourquoi" className="py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#3A5C8A] mb-3">
+    <section id="pourquoi" className="w-full py-16 lg:py-24 bg-[#F7FAFE]">
+      <div className="max-w-[1140px] mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* En-tête */}
+        <div className="max-w-2xl mx-auto text-center mb-14">
+          <span className="text-xs uppercase tracking-widest text-[#ED7410] font-semibold block mb-2">
             Pourquoi Choisir Nomira
-          </h2>
-          <p className="text-2xl sm:text-4xl font-bold text-[#1A2838] tracking-tight mb-4">
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#1A2838] tracking-tight">
             L'efficacité technique sans les lourdeurs d'agence
-          </p>
-          <p className="text-base sm:text-lg text-[#1A2838]/80 leading-relaxed">
-            Notre raison d'être : vous faire regagner vos ressources en éliminant les tâches
-            qui gaspillent votre énergie et vos marges.
+          </h2>
+          <p className="mt-3 text-sm sm:text-base text-[#405C82] leading-relaxed">
+            Notre raison d'être : vous faire regagner vos ressources en éliminant les tâches qui gaspillent votre énergie et vos marges.
           </p>
         </div>
 
@@ -51,16 +52,16 @@ export default function Pourquoi() {
             return (
               <div
                 key={i}
-                className="bg-white rounded-xl p-6 border border-[#405C82]/15 shadow-sm hover:border-[#3A5C8A]/40 transition-all flex flex-col justify-between"
+                className="bg-white p-6 rounded-xl border border-[#E2E9F3] flex flex-col justify-between hover:border-[#FFA23C] transition-all duration-200 hover:shadow-sm"
               >
                 <div>
-                  <div className="w-11 h-11 rounded-lg bg-[#FFA23C]/20 text-[#ED7410] flex items-center justify-center mb-5">
+                  <div className="w-10 h-10 rounded-lg bg-[#FFF6EA] text-[#ED7410] flex items-center justify-center mb-4">
                     <Icon className="w-5 h-5" />
                   </div>
                   <h3 className="text-base font-bold text-[#1A2838] mb-2 leading-snug">
                     {pillar.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#1A2838]/75 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#405C82] leading-relaxed">
                     {pillar.description}
                   </p>
                 </div>
@@ -72,4 +73,3 @@ export default function Pourquoi() {
     </section>
   );
 }
-

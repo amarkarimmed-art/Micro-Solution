@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Charte officielle Nomira (Obligatoire) */
+  /* Charte officielle Nomira */
   --color-primary: #1A2838;    /* titres, textes, en-tête */
   --color-brand: #3A5C8A;      /* boutons secondaires, liens */
   --color-brand-dark: #405C82; /* survols, bordures */
@@ -11,6 +11,7 @@
   --color-accent-light: #FFA23C;/* accents, surlignages, badges */
   --color-footer: #131B24;     /* fond du pied de page */
   --color-white: #FFFFFF;      /* fond principal */
+  --color-slate: #4A5A6A;      /* gris ardoise */
 
   /* Polices officielles Nomira */
   --font-heading: 'Grotesk', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -26,6 +27,7 @@
   --color-accent-light: #FFA23C;
   --color-footer: #131B24;
   --color-white: #FFFFFF;
+  --color-slate: #4A5A6A;
 
   --font-heading: 'Grotesk', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans: 'InterN', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -55,7 +57,17 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
-/* Utilitaires de contraste et accessibilité */
+/* Accessibilité : Focus visible systématique */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* Utilitaires de contraste et boutons */
 .btn-primary {
   background-color: var(--color-accent);
   color: #FFFFFF !important;
@@ -89,7 +101,6 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-brand-dark);
 }
 
-/* Badge avec contraste garanti */
 .badge-accent {
   background-color: rgba(255, 162, 60, 0.15);
   color: var(--color-primary);

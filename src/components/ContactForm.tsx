@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle2, ShieldCheck, Clock, Lock } from "lucide-react";
+import { Send, CheckCircle2, ShieldCheck, Clock, Lock, ArrowRight, Loader2 } from "lucide-react";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
     company: "",
-    sector: "Santé & Médical",
+    sector: "",
     frictionPoint: "",
-    honeypot: "", // Champ piège anti-spam
+    honeypot: "",
   });
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -27,9 +27,8 @@ export default function ContactForm() {
     setStatus("loading");
     setErrorMessage("");
 
-    // Vérification honeypot
+    // Anti-spam honeypot
     if (formData.honeypot) {
-      // Robot détecté
       setStatus("success");
       return;
     }
@@ -41,234 +40,259 @@ export default function ContactForm() {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Une erreur est survenue lors de l'envoi.");
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Une erreur est survenue lors de l'envoi de votre demande.");
       }
 
+      // Succès confirmé par le serveur
       setStatus("success");
       setFormData({
         fullName: "",
         phone: "",
         company: "",
-        sector: "Santé & Médical",
+        sector: "",
         frictionPoint: "",
         honeypot: "",
       });
     } catch (err: any) {
+      // En cas d'erreur, statut "error", message affiché, champs conservés !
       setStatus("error");
-      setErrorMessage(err.message || "Erreur de connexion, veuillez réessayer.");
+      setErrorMessage(
+        err.message || "Impossible de joindre le serveur. Veuillez vérifier votre connexion ou réessayer."
+      );
     }
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24 bg-white relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          {/* En-tête de section */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full badge-accent text-xs sm:text-sm font-semibold mb-3">
-              <Clock className="w-3.5 h-3.5 text-[#ED7410]" />
+    <section id="contact" className="w-full py-16 lg:py-24 bg-[#F7FAFE] border-t border-[#E2E9F3] relative">
+      {/* Ancre de secours pour liens vers #diagnostic */}
+      <div id="diagnostic" className="sr-only" />
+
+      <div className="max-w-[760px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-2xl p-6 sm:p-10 border border-[#E2E9F3] shadow-sm relative">
+          
+          {/* En-tête du formulaire */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF6EA] text-[#ED7410] text-xs font-semibold mb-3">
+              <Clock className="w-3.5 h-3.5" />
               <span>30 minutes sans frais ni engagement</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-bold text-[#1A2838] tracking-tight mb-4">
+            <h2 className="text-2xl sm:text-4xl font-bold text-[#1A2838] tracking-tight">
               Demandez votre diagnostic gratuit
             </h2>
-            <p className="text-base sm:text-lg text-[#1A2838]/80 max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-2 text-xs sm:text-sm text-[#405C82] max-w-lg mx-auto">
               Dites-nous quelle tâche manuelle freine votre entreprise. Nous vous répondons avec une estimation chiffrée du temps et des coûts récupérables.
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-[#405C82]/20 shadow-xl p-6 sm:p-10 relative overflow-hidden">
-            {/* Ligne d'accent supérieure */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#ED7410]" />
-
-            {status === "success" ? (
-              <div className="text-center py-12 px-4 animate-in fade-in zoom-in duration-200">
-                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-5">
-                  <CheckCircle2 className="w-10 h-10" />
-                </div>
-                <h3 className="text-2xl font-bold text-[#1A2838] mb-2">
-                  Demande bien reçue !
-                </h3>
-                <p className="text-base text-[#1A2838]/80 max-w-md mx-auto mb-6">
-                  Un consultant Nomira examine votre point de friction et vous recontactera sous 24h ouvrées pour planifier votre échange de 30 minutes.
-                </p>
+          {status === "success" ? (
+            <div className="text-center py-8 space-y-4 animate-in fade-in zoom-in duration-200">
+              <div className="w-16 h-16 rounded-full bg-[#E4F4EC] text-[#1D9E75] mx-auto flex items-center justify-center">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-[#1A2838]">
+                Demande bien reçue !
+              </h3>
+              <p className="text-sm sm:text-base text-[#405C82] max-w-md mx-auto leading-relaxed">
+                Un expert Nomira étudie votre point de friction et vous contactera sous 24h ouvrées avec une estimation préliminaire.
+              </p>
+              <div className="pt-2">
+                <a
+                  href="https://wa.me/212661574247?text=Bonjour%20Nomira,%20je%20viens%20de%20remplir%20le%20formulaire%20de%20diagnostic."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-[#1D9E75] font-semibold text-sm hover:underline"
+                >
+                  <span>Échanger en direct sur WhatsApp dès maintenant</span>
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+              <div className="pt-4">
                 <button
                   type="button"
                   onClick={() => setStatus("idle")}
-                  className="btn-secondary text-sm px-6 py-2.5"
+                  className="text-xs text-[#6784B0] hover:text-[#1A2838] underline"
                 >
                   Envoyer une autre demande
                 </button>
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Champ Honeypot invisible pour contrer les bots */}
-                <div className="hidden" aria-hidden="true">
-                  <label htmlFor="hp-field">Ne pas remplir ce champ</label>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-5">
+              
+              {/* Champ Honeypot invisible */}
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="form-hp">Ne pas remplir ce champ</label>
+                <input
+                  type="text"
+                  id="form-hp"
+                  name="honeypot"
+                  value={formData.honeypot}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Nom et prénom */}
+                <div className="space-y-1.5">
+                  <label
+                    htmlFor="full-name"
+                    className="block text-xs sm:text-sm font-semibold text-[#1A2838]"
+                  >
+                    Nom et prénom <span className="text-[#ED7410]">*</span>
+                  </label>
                   <input
                     type="text"
-                    id="hp-field"
-                    name="honeypot"
-                    value={formData.honeypot}
-                    onChange={handleChange}
-                    tabIndex={-1}
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {/* Nom & Prénom */}
-                  <div>
-                    <label
-                      htmlFor="fullName"
-                      className="block text-sm font-semibold text-[#1A2838] mb-1.5"
-                    >
-                      Nom et prénom <span className="text-[#ED7410]">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="fullName"
-                      name="fullName"
-                      required
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      placeholder="ex. Karim Bennani"
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3A5C8A] focus:border-transparent text-sm transition-all"
-                    />
-                  </div>
-
-                  {/* Téléphone / WhatsApp */}
-                  <div>
-                    <label
-                      htmlFor="phone"
-                      className="block text-sm font-semibold text-[#1A2838] mb-1.5"
-                    >
-                      Téléphone ou WhatsApp <span className="text-[#ED7410]">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      required
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="+212 6 XX XX XX XX"
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3A5C8A] focus:border-transparent text-sm transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {/* Entreprise */}
-                  <div>
-                    <label
-                      htmlFor="company"
-                      className="block text-sm font-semibold text-[#1A2838] mb-1.5"
-                    >
-                      Nom de votre entreprise <span className="text-[#ED7410]">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="company"
-                      name="company"
-                      required
-                      value={formData.company}
-                      onChange={handleChange}
-                      placeholder="ex. Cabinet Médical Atlas"
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3A5C8A] focus:border-transparent text-sm transition-all"
-                    />
-                  </div>
-
-                  {/* Secteur d'activité */}
-                  <div>
-                    <label
-                      htmlFor="sector"
-                      className="block text-sm font-semibold text-[#1A2838] mb-1.5"
-                    >
-                      Secteur d'activité <span className="text-[#ED7410]">*</span>
-                    </label>
-                    <select
-                      id="sector"
-                      name="sector"
-                      required
-                      value={formData.sector}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3A5C8A] focus:border-transparent text-sm transition-all bg-white"
-                    >
-                      <option value="Santé & Médical">Santé & Cabinets médicaux</option>
-                      <option value="Formation & Éducation">Formation & Établissements</option>
-                      <option value="Commerces & Distribution">Commerces & Distribution</option>
-                      <option value="Services B2B & Conseil">Services B2B & Conseil</option>
-                      <option value="Industrie & Logistique">Industrie & Logistique</option>
-                      <option value="Autre secteur">Autre secteur spécifique</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Point de friction principal */}
-                <div>
-                  <label
-                    htmlFor="frictionPoint"
-                    className="block text-sm font-semibold text-[#1A2838] mb-1.5"
-                  >
-                    Quel est votre point de friction ou la tâche qui vous fait perdre le plus de temps ?{" "}
-                    <span className="text-[#ED7410]">*</span>
-                  </label>
-                  <textarea
-                    id="frictionPoint"
-                    name="frictionPoint"
+                    id="full-name"
+                    name="fullName"
                     required
-                    rows={4}
-                    value={formData.frictionPoint}
+                    value={formData.fullName}
                     onChange={handleChange}
-                    placeholder="Exemple : Nous passons 3 heures par semaine à ressaisir manuellement les devis dans notre logiciel de facturation et à relancer les impayés un par un sur WhatsApp..."
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3A5C8A] focus:border-transparent text-sm transition-all resize-y"
+                    placeholder="ex. Karim Bennani"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#C3D0E2] text-[#1A2838] placeholder:text-[#93A9C7] focus:outline-none focus:border-[#ED7410] focus:ring-1 focus:ring-[#ED7410] transition-colors text-sm"
                   />
                 </div>
 
-                {errorMessage && (
-                  <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">
-                    {errorMessage}
-                  </div>
-                )}
-
-                {/* Bouton de soumission */}
-                <div>
-                  <button
-                    type="submit"
-                    disabled={status === "loading"}
-                    className="btn-primary w-full py-4 text-base font-semibold shadow-md gap-2 tracking-wide disabled:opacity-60 cursor-pointer"
+                {/* Téléphone ou WhatsApp */}
+                <div className="space-y-1.5">
+                  <label
+                    htmlFor="phone"
+                    className="block text-xs sm:text-sm font-semibold text-[#1A2838]"
                   >
-                    {status === "loading" ? (
-                      <span>Transmission en cours...</span>
-                    ) : (
-                      <>
-                        <span>Réserver mon diagnostic gratuit (30 min)</span>
-                        <Send className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
+                    Téléphone ou WhatsApp <span className="text-[#ED7410]">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+212 6 XX XX XX XX"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#C3D0E2] text-[#1A2838] placeholder:text-[#93A9C7] focus:outline-none focus:border-[#ED7410] focus:ring-1 focus:ring-[#ED7410] transition-colors text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Nom de l'entreprise */}
+                <div className="space-y-1.5">
+                  <label
+                    htmlFor="company-name"
+                    className="block text-xs sm:text-sm font-semibold text-[#1A2838]"
+                  >
+                    Nom de votre entreprise <span className="text-[#ED7410]">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="company-name"
+                    name="company"
+                    required
+                    value={formData.company}
+                    onChange={handleChange}
+                    placeholder="ex. Cabinet Médical Anfa"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#C3D0E2] text-[#1A2838] placeholder:text-[#93A9C7] focus:outline-none focus:border-[#ED7410] focus:ring-1 focus:ring-[#ED7410] transition-colors text-sm"
+                  />
                 </div>
 
-                {/* Mentions de réassurance obligatoires */}
-                <div className="pt-2 flex flex-col sm:flex-row items-center justify-between text-xs text-[#1A2838]/70 gap-3 border-t border-gray-100">
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-[#3A5C8A]" />
-                    <span>Réponse sous 24h ouvrées</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5 text-[#3A5C8A]" />
-                    <span>Données 100 % confidentielles (conformité CNDP & RGPD)</span>
-                  </div>
+                {/* Secteur d'activité */}
+                <div className="space-y-1.5">
+                  <label
+                    htmlFor="sector"
+                    className="block text-xs sm:text-sm font-semibold text-[#1A2838]"
+                  >
+                    Secteur d'activité <span className="text-[#ED7410]">*</span>
+                  </label>
+                  <select
+                    id="sector"
+                    name="sector"
+                    required
+                    value={formData.sector}
+                    onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#C3D0E2] text-[#1A2838] bg-white focus:outline-none focus:border-[#ED7410] focus:ring-1 focus:ring-[#ED7410] transition-colors text-sm"
+                  >
+                    <option value="" disabled>Sélectionnez un secteur</option>
+                    <option value="Santé & Cabinets médicaux">Santé &amp; Cabinets médicaux</option>
+                    <option value="Formation & Établissements">Formation &amp; Établissements</option>
+                    <option value="Commerces & Distribution">Commerces &amp; Distribution</option>
+                    <option value="Services B2B & Conseil">Services B2B &amp; Conseil</option>
+                    <option value="Industrie & Logistique">Industrie &amp; Logistique</option>
+                    <option value="Autre secteur spécifique">Autre secteur spécifique</option>
+                  </select>
                 </div>
-              </form>
-            )}
-          </div>
+              </div>
+
+              {/* Point de friction */}
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="friction"
+                  className="block text-xs sm:text-sm font-semibold text-[#1A2838]"
+                >
+                  Quel est votre point de friction ou la tâche qui vous fait perdre le plus de temps ?{" "}
+                  <span className="text-[#ED7410]">*</span>
+                </label>
+                <textarea
+                  id="friction"
+                  name="frictionPoint"
+                  required
+                  rows={3}
+                  value={formData.frictionPoint}
+                  onChange={handleChange}
+                  placeholder="Exemple : Nous passons 3 heures par semaine à ressaisir manuellement les devis dans notre logiciel de facturation et à relancer les impayés un par un sur WhatsApp..."
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#C3D0E2] text-[#1A2838] placeholder:text-[#93A9C7] focus:outline-none focus:border-[#ED7410] focus:ring-1 focus:ring-[#ED7410] transition-colors text-sm resize-none"
+                />
+              </div>
+
+              {/* Message d'erreur en cas de rejet réseau sans effacer les champs */}
+              {errorMessage && (
+                <div
+                  role="alert"
+                  className="p-3.5 rounded-lg bg-[#FBE9E6] border border-[#ffdad6] text-xs sm:text-sm text-[#A82D18] font-medium animate-in fade-in duration-150"
+                >
+                  {errorMessage}
+                </div>
+              )}
+
+              {/* Bouton de soumission */}
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="w-full flex items-center justify-center gap-2 bg-[#ED7410] hover:bg-[#d86507] active:bg-[#c55e0b] text-white font-semibold text-sm sm:text-base py-3.5 px-6 rounded-lg transition-all duration-200 hover:-translate-y-0.5 shadow-sm disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFA23C]"
+                >
+                  {status === "loading" ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Transmission en cours...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Réserver mon diagnostic gratuit (30 min)</span>
+                      <Send className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Badges de Réassurance */}
+              <div className="pt-3 flex flex-wrap items-center justify-between text-xs text-[#6784B0] gap-2 border-t border-[#E2E9F3]">
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-[#1D9E75]" />
+                  <span>Réponse sous 24h ouvrées</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Lock className="w-4 h-4 text-[#1D9E75]" />
+                  <span>Données 100 % confidentielles (conformité CNDP &amp; RGPD)</span>
+                </div>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </section>
   );
 }
-
