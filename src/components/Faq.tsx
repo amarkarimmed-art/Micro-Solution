@@ -31,31 +31,29 @@ const FAQ_ITEMS = [
 ];
 
 export default function Faq() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (idx: number) => {
     setOpenIndex(openIndex === idx ? null : idx);
   };
 
   return (
-    <section id="faq" className="w-full py-16 lg:py-24 bg-white border-t border-[#E2E9F3]">
+    <section className="w-full py-16 md:py-24 bg-surface-canvas border-t border-border-subtle" id="faq">
       <div className="max-w-[840px] mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* En-tête */}
         <div className="text-center mb-12">
-          <span className="text-xs uppercase tracking-widest text-[#ED7410] font-semibold block mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-elevated text-steel-blue text-xs uppercase tracking-wider font-semibold mb-3">
             Foire Aux Questions
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#1A2838] tracking-tight">
+          </div>
+          <h2 className="font-heading text-2xl sm:text-4xl text-text-primary tracking-tight font-bold mb-3">
             Tout ce que vous devez savoir avant de démarrer
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-[#405C82]">
-            Des réponses claires et sans détour sur notre façon d'intervenir.
+          <p className="text-base sm:text-lg text-text-secondary">
+            Des réponses claires et sans détour sur notre façon d&apos;intervenir.
           </p>
         </div>
 
-        {/* Accordéon FAQ */}
-        <div className="space-y-3">
+        {/* Accordéon interactif avec transition CSS grid */}
+        <div className="space-y-3" id="faq-accordion">
           {FAQ_ITEMS.map((item, index) => {
             const isOpen = openIndex === index;
             const contentId = `faq-content-${index}`;
@@ -63,55 +61,48 @@ export default function Faq() {
             return (
               <div
                 key={index}
-                className="border border-[#E2E9F3] rounded-xl bg-[#F3F6FA]/50 overflow-hidden transition-all duration-200"
+                className={`faq-item reveal-item revealed rounded-xl border border-border-subtle bg-surface-subtle overflow-hidden ${
+                  isOpen ? "active" : ""
+                }`}
               >
                 <button
                   type="button"
-                  onClick={() => toggle(index)}
-                  className="w-full p-5 text-left flex items-center justify-between gap-4 text-sm sm:text-base font-semibold text-[#1A2838] hover:text-[#ED7410] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3A5C8A] transition-colors"
                   aria-expanded={isOpen}
                   aria-controls={contentId}
+                  onClick={() => toggle(index)}
+                  className="faq-toggle w-full p-5 text-left flex items-center justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue transition-colors"
                 >
-                  <span>{item.q}</span>
-                  <ChevronDown
-                    className={`w-5 h-5 text-[#6784B0] shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 text-[#ED7410]" : ""
-                    }`}
-                  />
+                  <span className="font-heading text-[17px] font-bold text-text-primary">
+                    {item.q}
+                  </span>
+                  <ChevronDown className="faq-icon text-steel-blue shrink-0 w-5 h-5 transition-transform duration-200" />
                 </button>
-
-                <div
-                  id={contentId}
-                  role="region"
-                  aria-labelledby={`faq-header-${index}`}
-                  className={`px-5 pb-5 pt-1 text-xs sm:text-sm text-[#405C82] leading-relaxed ${
-                    isOpen ? "block animate-in fade-in duration-150" : "hidden"
-                  }`}
-                >
-                  {item.a}
+                <div id={contentId} role="region" className="faq-answer-grid">
+                  <div className="overflow-hidden">
+                    <div className="p-5 pt-0 text-text-secondary text-sm sm:text-base border-t border-border-subtle/40 leading-relaxed">
+                      {item.a}
+                    </div>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Contact direct sous la FAQ */}
-        <div className="mt-8 text-center text-xs sm:text-sm text-[#405C82]">
+        {/* Contact direct sous FAQ verbatim */}
+        <div className="mt-8 text-center text-text-secondary text-sm sm:text-base">
           Une interrogation spécifique sur votre environnement ?{" "}
           <a
+            className="text-accent-orange font-semibold hover:underline inline-flex items-center gap-1 ml-1"
             href="https://wa.me/212661574247"
-            target="_blank"
             rel="noopener noreferrer"
-            className="text-[#ED7410] hover:underline font-semibold inline-flex items-center gap-1"
+            target="_blank"
           >
             <span>Posez-nous la question sur WhatsApp</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>{" "}
           ou par téléphone au{" "}
-          <a
-            href="tel:+212661574247"
-            className="text-[#1A2838] hover:text-[#ED7410] font-semibold"
-          >
+          <a className="text-primary font-semibold hover:underline ml-1" href="tel:+212661574247">
             +212 6 61 57 42 47
           </a>
           .

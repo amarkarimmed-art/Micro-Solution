@@ -1,4 +1,4 @@
-import { Stethoscope, GraduationCap, Store, CheckCircle2, Sliders } from "lucide-react";
+import { Stethoscope, GraduationCap, Store, Check, FileEdit } from "lucide-react";
 
 const SECTORS = [
   {
@@ -44,98 +44,86 @@ const SECTORS = [
 
 export default function Solutions() {
   return (
-    <section id="solutions" className="w-full py-16 lg:py-24 bg-[#F7FAFE]">
-      <div className="max-w-[1140px] mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* En-tête */}
-        <div className="max-w-2xl mx-auto text-center mb-14">
-          <span className="text-xs uppercase tracking-widest text-[#ED7410] font-semibold block mb-2">
-            Cas d'Usage Sectoriels
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-bold text-[#1A2838] tracking-tight">
+    <section className="w-full py-16 md:py-24 bg-surface border-t border-border-subtle" id="solutions">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mb-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-elevated text-steel-blue text-xs uppercase tracking-wider font-semibold mb-3">
+            Cas d&apos;Usage Sectoriels
+          </div>
+          <h2 className="font-heading text-2xl sm:text-4xl text-text-primary tracking-tight font-bold mb-3">
             Des micro-solutions forgées pour votre réalité terrain
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-[#405C82] leading-relaxed">
+          <p className="text-base sm:text-lg text-text-secondary leading-relaxed">
             Chaque métier a son propre point de blocage. Nous concevons la solution exacte qui supprime la friction sans bouleverser vos habitudes de travail.
           </p>
         </div>
 
-        {/* 3 Cartes Sectorielles */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {SECTORS.map((sector) => {
-            const Icon = sector.icon;
+            const IconComponent = sector.icon;
+
             return (
               <div
                 key={sector.id}
-                className="bg-white rounded-xl border border-[#E2E9F3] p-6 flex flex-col justify-between hover:border-[#93A9C7] transition-all duration-200 hover:shadow-sm"
+                className="reveal-item revealed flex flex-col justify-between p-6 sm:p-7 rounded-xl bg-surface-canvas border border-border-subtle shadow-sm hover:shadow-md transition-shadow"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="px-2.5 py-1 rounded bg-[#F3F6FA] text-[#1A2838] text-xs font-semibold">
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <span className="px-2.5 py-1 rounded-full bg-surface-elevated text-steel-blue text-xs font-semibold">
                       {sector.badge}
                     </span>
-                    <Icon className="w-5 h-5 text-[#6784B0]" />
+                    <IconComponent className="w-5 h-5 text-accent-orange" />
                   </div>
-
                   <div className="mb-4">
-                    <span className="text-xl sm:text-2xl font-bold text-[#ED7410]">
-                      {sector.stat}
-                    </span>
-                    <p className="text-xs text-[#6784B0] font-medium mt-0.5">
-                      {sector.statLabel}
-                    </p>
+                    <div className="font-heading text-[26px] font-bold text-primary">{sector.stat}</div>
+                    <div className="text-xs text-text-muted">{sector.statLabel}</div>
                   </div>
-
-                  <h3 className="text-lg font-bold text-[#1A2838] mb-4">
+                  <h3 className="font-heading text-lg font-bold text-text-primary mb-3">
                     {sector.title}
                   </h3>
-
-                  <ul className="space-y-3 text-xs sm:text-sm text-[#405C82]">
-                    {sector.features.map((feat, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#ED7410] shrink-0 mt-0.5" />
-                        <span>{feat}</span>
+                  <ul className="space-y-2.5 text-xs sm:text-sm text-text-secondary mb-6">
+                    {sector.features.map((feature, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-steel-blue shrink-0 mt-0.5" />
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-
-                <div className="mt-6 pt-4 border-t border-[#E2E9F3]">
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-lg bg-[#F3F6FA] hover:bg-[#FFF6EA] text-[#1A2838] hover:text-[#ED7410] font-semibold text-xs sm:text-sm transition-colors border border-[#C3D0E2] hover:border-[#FFA23C]"
-                  >
-                    Chiffrer ce cas d'usage
-                  </a>
-                </div>
+                <a
+                  className="w-full inline-flex items-center justify-center h-10 rounded-lg bg-surface-elevated text-primary font-semibold text-sm hover:bg-steel-blue hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
+                  href="#contact"
+                >
+                  Chiffrer ce cas d&apos;usage
+                </a>
               </div>
             );
           })}
         </div>
 
-        <p className="text-center text-xs text-[#6784B0] mt-5 italic">
-          * Données issues de modélisations et simulations de cas d'usage types (chiffres indicatifs à calibrer selon vos volumes réels lors du diagnostic).
+        <p className="text-xs text-text-muted italic mb-8">
+          * Données issues de modélisations et simulations de cas d&apos;usage types (chiffres indicatifs à calibrer selon vos volumes réels lors du diagnostic).
         </p>
 
-        {/* Bannière sur-mesure */}
-        <div className="mt-12 bg-[#1A2838] rounded-xl p-6 md:p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 border border-[#2A3F5E] shadow-sm">
-          <div className="space-y-2 text-center md:text-left">
-            <div className="inline-flex items-center gap-1.5 text-[#FFA23C] text-xs font-semibold uppercase tracking-wider">
-              <Sliders className="w-4 h-4" />
-              <span>Cas d'usage sur-mesure</span>
-            </div>
-            <h3 className="text-lg sm:text-xl font-bold text-white">
+        {/* Callout Sur-mesure */}
+        <div className="reveal-item revealed rounded-xl bg-surface-canvas border border-border-subtle p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+          <div className="max-w-2xl text-left">
+            <span className="px-2 py-0.5 rounded bg-surface-container text-steel-blue text-[11px] font-bold uppercase tracking-wider mb-2 inline-block">
+              Cas d&apos;usage sur-mesure
+            </span>
+            <h3 className="font-heading text-lg sm:text-xl font-bold text-text-primary mb-1">
               Votre métier a un workflow ou un outil particulier ?
             </h3>
-            <p className="text-xs sm:text-sm text-[#C3D0E2] max-w-2xl leading-relaxed">
-              Tableurs sur-mesure, échanges WhatsApp récurrents, liaisons entre deux logiciels incompatibles... Nos micro-solutions s'intègrent précisément dans vos pratiques sans vous forcer à tout réapprendre.
+            <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
+              Tableurs sur-mesure, échanges WhatsApp récurrents, liaisons entre deux logiciels incompatibles... Nos micro-solutions s&apos;intègrent précisément dans vos pratiques sans vous forcer à tout réapprendre.
             </p>
           </div>
           <a
+            className="shrink-0 inline-flex items-center justify-center h-11 px-6 rounded-lg bg-primary text-white font-medium text-sm hover:bg-steel-blue transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-blue"
             href="#contact"
-            className="shrink-0 inline-flex items-center gap-2 bg-[#ED7410] hover:bg-[#d86507] text-white font-semibold text-xs sm:text-sm px-6 py-3 rounded-lg transition-transform duration-150 hover:scale-105 shadow-sm"
           >
-            <span>Décrire votre processus</span>
+            <FileEdit className="w-4 h-4 mr-2" />
+            Décrire votre processus
           </a>
         </div>
       </div>

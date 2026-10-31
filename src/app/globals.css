@@ -13,6 +13,24 @@
   --color-white: #FFFFFF;      /* fond principal */
   --color-slate: #4A5A6A;      /* gris ardoise */
 
+  /* Couleurs stitch.html */
+  --color-surface: #f8f9ff;
+  --color-surface-canvas: #FFFFFF;
+  --color-surface-elevated: #F1F5F9;
+  --color-surface-subtle: #F8FAFC;
+  --color-surface-container: #e7eefb;
+  --color-surface-container-high: #e1e9f6;
+  --color-text-primary: #131B24;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748B;
+  --color-accent-orange: #ED7410;
+  --color-accent-orange-hover: #D86306;
+  --color-steel-blue: #3A5C8A;
+  --color-soft-ice: #8FB0DC;
+  --color-border-subtle: #E2E8F0;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+
   /* Polices officielles Nomira */
   --font-heading: 'Grotesk', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans: 'InterN', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -28,6 +46,23 @@
   --color-footer: #131B24;
   --color-white: #FFFFFF;
   --color-slate: #4A5A6A;
+
+  --color-surface: #f8f9ff;
+  --color-surface-canvas: #FFFFFF;
+  --color-surface-elevated: #F1F5F9;
+  --color-surface-subtle: #F8FAFC;
+  --color-surface-container: #e7eefb;
+  --color-surface-container-high: #e1e9f6;
+  --color-text-primary: #131B24;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748B;
+  --color-accent-orange: #ED7410;
+  --color-accent-orange-hover: #D86306;
+  --color-steel-blue: #3A5C8A;
+  --color-soft-ice: #8FB0DC;
+  --color-border-subtle: #E2E8F0;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
 
   --font-heading: 'Grotesk', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans: 'InterN', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -51,6 +86,7 @@ body {
   background-color: var(--color-white);
   color: var(--color-primary);
   overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -106,4 +142,109 @@ textarea:focus-visible {
   color: var(--color-primary);
   border: 1px solid rgba(255, 162, 60, 0.4);
   font-weight: 600;
+}
+
+/* ==========================================================================
+   Animations et Transitions stitch.html
+   ========================================================================== */
+
+/* Scroll reveal transitions */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 450ms cubic-bezier(0.16, 1, 0.3, 1), transform 450ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal-item.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero Stagger animations */
+@keyframes heroCascadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes underlineGrow {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.hero-stagger-1 {
+  animation: heroCascadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1) 0ms forwards;
+}
+.hero-stagger-2 {
+  animation: heroCascadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards;
+}
+.hero-stagger-3 {
+  animation: heroCascadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
+}
+.hero-stagger-4 {
+  animation: heroCascadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1) 240ms forwards;
+}
+.hero-stagger-card-1 {
+  animation: heroCascadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1) 320ms forwards;
+}
+.hero-stagger-card-2 {
+  animation: heroCascadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1) 400ms forwards;
+}
+.hero-stagger-card-3 {
+  animation: heroCascadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1) 480ms forwards;
+}
+.hero-stagger-ribbon {
+  animation: heroCascadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1) 560ms forwards;
+}
+
+.svg-underline-animated {
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: underlineGrow 450ms cubic-bezier(0.16, 1, 0.3, 1) 240ms forwards;
+  will-change: transform;
+}
+
+/* Accordion collapse grid transition */
+.faq-answer-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.faq-item.active .faq-answer-grid {
+  grid-template-rows: 1fr;
+}
+.faq-icon {
+  transition: transform 200ms ease;
+}
+.faq-item.active .faq-icon {
+  transform: rotate(180deg);
+}
+
+/* Accessibility reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .svg-underline-animated {
+    transform: scaleX(1) !important;
+  }
+  .reveal-item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .faq-answer-grid {
+    grid-template-rows: auto !important;
+  }
 }

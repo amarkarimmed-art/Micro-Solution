@@ -18,7 +18,7 @@ export default function Home() {
       {/* 1. Header Fixe */}
       <Header />
 
-      <main id="main-content" className="flex-grow">
+      <main id="main-content" className="flex-grow pt-16 sm:pt-20">
         {/* 2. Hero Section */}
         <Hero />
 
