@@ -74,7 +74,7 @@ export default function Hero() {
         {/* Grille des 3 Cartes KPI Clés */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl mx-auto mb-10">
           {/* KPI 1 */}
-          <div className="hero-stagger-kpi-1 opacity-0 p-6 rounded-2xl bg-surface-canvas border border-border-subtle shadow-sm hover:shadow-md transition-shadow text-left flex flex-col justify-between">
+          <div className="hero-stagger-card-1 opacity-0 p-6 rounded-2xl bg-surface-canvas border border-border-subtle shadow-sm hover:shadow-md transition-shadow text-left flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs uppercase tracking-wider text-text-muted font-bold">
@@ -96,7 +96,7 @@ export default function Hero() {
           </div>
 
           {/* KPI 2 */}
-          <div className="hero-stagger-kpi-2 opacity-0 p-6 rounded-2xl bg-surface-canvas border border-border-subtle shadow-sm hover:shadow-md transition-shadow text-left flex flex-col justify-between">
+          <div className="hero-stagger-card-2 opacity-0 p-6 rounded-2xl bg-surface-canvas border border-border-subtle shadow-sm hover:shadow-md transition-shadow text-left flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs uppercase tracking-wider text-text-muted font-bold">
@@ -118,7 +118,7 @@ export default function Hero() {
           </div>
 
           {/* KPI 3 */}
-          <div className="hero-stagger-kpi-3 opacity-0 p-6 rounded-2xl bg-surface-canvas border border-border-subtle shadow-sm hover:shadow-md transition-shadow text-left flex flex-col justify-between">
+          <div className="hero-stagger-card-3 opacity-0 p-6 rounded-2xl bg-surface-canvas border border-border-subtle shadow-sm hover:shadow-md transition-shadow text-left flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs uppercase tracking-wider text-text-muted font-bold">
