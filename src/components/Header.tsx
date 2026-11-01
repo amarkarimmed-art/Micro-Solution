@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Phone, Menu, X } from "lucide-react";
 
@@ -17,6 +17,19 @@ const NAV_LINKS = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const isClickingRef = useRef(false);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleNavClick = (href: string) => {
+    const targetId = href.replace(/^#/, "");
+    setActiveId(targetId);
+    isClickingRef.current = true;
+    if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    clickTimeoutRef.current = setTimeout(() => {
+      isClickingRef.current = false;
+    }, 1000);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +37,72 @@ export default function Header() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const sectionIds = NAV_LINKS.map((link) => link.href.replace(/^#/, ""));
+
+    const updateActiveSection = () => {
+      if (isClickingRef.current) return;
+
+      const zoneTop = 64;
+      const zoneBottom = window.innerHeight * 0.4;
+      let bestId: string | null = null;
+      let maxOverlap = 0;
+
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        const overlapTop = Math.max(zoneTop, rect.top);
+        const overlapBottom = Math.min(zoneBottom, rect.bottom);
+        const overlap = Math.max(0, overlapBottom - overlapTop);
+        if (overlap > maxOverlap) {
+          maxOverlap = overlap;
+          bestId = id;
+        }
+      }
+
+      if (maxOverlap > 0) {
+        setActiveId(bestId);
+      } else {
+        // En remontant jusqu'au hero (au-dessus du premier seuil), aucun lien n'est actif
+        const firstSection = document.getElementById(sectionIds[0]);
+        if (firstSection && window.scrollY < firstSection.offsetTop - 100) {
+          setActiveId(null);
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      () => {
+        updateActiveSection();
+      },
+      {
+        rootMargin: "-64px 0px -60% 0px",
+        threshold: 0,
+      }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    const handleScrollHero = () => {
+      if (isClickingRef.current) return;
+      const firstSection = document.getElementById(sectionIds[0]);
+      if (firstSection && window.scrollY < firstSection.offsetTop - 100) {
+        setActiveId((prev) => (prev !== null ? null : prev));
+      }
+    };
+    window.addEventListener("scroll", handleScrollHero, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScrollHero);
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    };
   }, []);
 
   return (
@@ -62,15 +141,22 @@ export default function Header() {
             
             {/* Navigation Desktop */}
             <nav className="hidden xl:flex items-center gap-6" aria-label="Navigation principale">
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm font-medium text-[#1A2838] hover:text-[#ED7410] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3A5C8A] rounded px-1 py-0.5"
-                >
-                  {link.label}
-                </a>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const isActive = activeId === link.href.slice(1);
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => handleNavClick(link.href)}
+                    aria-current={isActive ? "location" : undefined}
+                    className={`text-sm text-[#1A2838] hover:text-[#ED7410] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3A5C8A] rounded px-1 py-0.5 nav-link ${
+                      isActive ? "nav-link-active font-semibold" : "font-medium"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
             </nav>
 
             {/* Téléphone direct */}
@@ -113,16 +199,25 @@ export default function Header() {
           className="xl:hidden border-t border-[#3A5C8A]/10 bg-white px-4 pt-4 pb-6 shadow-xl animate-in fade-in duration-150"
         >
           <nav className="flex flex-col space-y-2.5" aria-label="Menu mobile">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-medium text-[#1A2838] hover:text-[#ED7410] hover:bg-[#8FB0DC]/10 px-3 py-2 rounded-md transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const isActive = activeId === link.href.slice(1);
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => {
+                    handleNavClick(link.href);
+                    setMobileMenuOpen(false);
+                  }}
+                  aria-current={isActive ? "location" : undefined}
+                  className={`w-fit text-base text-[#1A2838] hover:text-[#ED7410] hover:bg-[#8FB0DC]/10 px-3 py-2 rounded-md transition-colors nav-link nav-link-mobile ${
+                    isActive ? "nav-link-active font-semibold" : "font-medium"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
             <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
               <a
                 href="tel:+212661574247"

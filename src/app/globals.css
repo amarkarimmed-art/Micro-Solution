@@ -110,6 +110,46 @@ footer,
   scroll-snap-align: none;
 }
 
+/* ==========================================================================
+   Navigation : Animation du lien actif (Partie B)
+   ========================================================================== */
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  transition: color 200ms ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: -2px;
+  height: 2px;
+  background-color: #ED7410;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms ease-out;
+  pointer-events: none;
+}
+
+.nav-link-mobile::after {
+  left: 12px;
+  right: 12px;
+}
+
+.nav-link.nav-link-active {
+  color: #1A2838 !important;
+  font-weight: 600 !important;
+}
+
+.nav-link.nav-link-active::after {
+  transform: scaleX(1);
+  transition: transform 300ms ease-out;
+}
+
+
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
@@ -271,5 +311,16 @@ textarea:focus-visible {
   }
   .faq-answer-grid {
     grid-template-rows: auto !important;
+  }
+  .nav-link:not(.nav-link-active)::after {
+    display: none !important;
+    opacity: 0 !important;
+    transform: scaleX(0) !important;
+  }
+  .nav-link.nav-link-active::after {
+    display: block !important;
+    opacity: 1 !important;
+    transform: scaleX(1) !important;
+    transition: none !important;
   }
 }
