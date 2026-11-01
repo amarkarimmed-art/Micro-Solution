@@ -1,6 +1,61 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import { ArrowRight, ChevronDown, CheckCircle2, TrendingDown, Clock, Landmark, Info } from "lucide-react";
 
 export default function Hero() {
+  const [showIntro, setShowIntro] = useState(false);
+  const [isFading, setIsFading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const removeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const safetyTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const skip = () => {
+    if (removeTimerRef.current) clearTimeout(removeTimerRef.current);
+    if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+    setIsFading(false);
+    setIsPlaying(false);
+    setShowIntro(false);
+  };
+
+  const handleVideoEnd = () => {
+    if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+    setIsFading(true);
+    setIsPlaying(false);
+    removeTimerRef.current = setTimeout(() => {
+      setShowIntro(false);
+    }, 300);
+  };
+
+  useEffect(() => {
+    try {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        sessionStorage.setItem("nomira_hero_intro_seen", "true");
+        return;
+      }
+    } catch (e) {}
+
+    try {
+      if (sessionStorage.getItem("nomira_hero_intro_seen")) {
+        return;
+      }
+      sessionStorage.setItem("nomira_hero_intro_seen", "true");
+    } catch (e) {}
+
+    setShowIntro(true);
+    setIsPlaying(true);
+
+    safetyTimerRef.current = setTimeout(() => {
+      skip();
+    }, 5000);
+
+    return () => {
+      if (removeTimerRef.current) clearTimeout(removeTimerRef.current);
+      if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+    };
+  }, []);
+
   return (
     <section className="relative w-full overflow-hidden bg-surface py-10 md:py-20">
       {/* Fond décoratif architectural diffus */}
@@ -21,36 +76,81 @@ export default function Hero() {
           </span>
         </div>
 
-        {/* Titre H1 Imposant */}
-        <div className="hero-stagger-2 opacity-0 max-w-4xl mx-auto mb-4">
-          <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl text-text-primary tracking-tight font-bold">
-            <span>Un problème visé.</span>
-            <br />
-            <span className="relative inline-block mt-1">
-              <span>Un coût en moins.</span>
-              {/* Soulignement vectoriel animé en scaleX(0 -> 1) */}
-              <svg
-                aria-hidden="true"
-                className="svg-underline-animated absolute -bottom-2 md:-bottom-3 left-0 w-full h-[9px] md:h-[13px] text-accent-orange overflow-visible pointer-events-none"
-                fill="none"
-                viewBox="0 0 250 14"
-              >
-                <path
-                  d="M3 10.5C52 3.5 156 1.5 247 11.5"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeWidth="3.2"
-                />
-              </svg>
-            </span>
-          </h1>
-        </div>
+        {/* Zone de taille fixe aspect-[16/9], max-w-[640px], centrée */}
+        <div className="relative w-full max-w-[640px] mx-auto aspect-[16/9] flex items-center justify-center mb-6">
+          {/* Titre et paragraphe : masqués pendant l'intro (opacity 0), puis visibles */}
+          <div
+            className={`w-full flex flex-col items-center justify-center text-center transition-opacity duration-500 ${
+              isPlaying ? "opacity-0 pointer-events-none" : "opacity-100"
+            }`}
+          >
+            {/* Titre H1 Imposant */}
+            <div className="hero-stagger-2 opacity-0 max-w-4xl mx-auto mb-4">
+              <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl text-text-primary tracking-tight font-bold">
+                <span>Un problème visé.</span>
+                <br />
+                <span className="relative inline-block mt-1">
+                  <span>Un coût en moins.</span>
+                  {/* Soulignement vectoriel animé en scaleX(0 -> 1) */}
+                  <svg
+                    aria-hidden="true"
+                    className="svg-underline-animated absolute -bottom-2 md:-bottom-3 left-0 w-full h-[9px] md:h-[13px] text-accent-orange overflow-visible pointer-events-none"
+                    fill="none"
+                    viewBox="0 0 250 14"
+                  >
+                    <path
+                      d="M3 10.5C52 3.5 156 1.5 247 11.5"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeWidth="3.2"
+                    />
+                  </svg>
+                </span>
+              </h1>
+            </div>
 
-        {/* Sous-titre synthétique */}
-        <div className="hero-stagger-3 opacity-0 max-w-2xl mx-auto mb-6">
-          <p className="text-base sm:text-lg text-text-secondary leading-relaxed">
-            Nomira conçoit et déploie des micro-solutions logicielles ultra-ciblées en quelques jours. Éliminez vos ressaisies, fiabilisez vos encaissements et regagnez votre temps précieux, sans abonnement lourd ni usine à gaz.
-          </p>
+            {/* Sous-titre synthétique */}
+            <div className="hero-stagger-3 opacity-0 max-w-2xl mx-auto mb-6">
+              <p className="text-base sm:text-lg text-text-secondary leading-relaxed">
+                Nomira conçoit et déploie des micro-solutions logicielles ultra-ciblées en quelques jours. Éliminez vos ressaisies, fiabilisez vos encaissements et regagnez votre temps précieux, sans abonnement lourd ni usine à gaz.
+              </p>
+            </div>
+          </div>
+
+          {/* Intro en absolute par-dessus cette zone */}
+          {showIntro && (
+            <div
+              className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-300 ${
+                isFading ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
+            >
+              <button
+                type="button"
+                onClick={skip}
+                className="absolute top-2 right-2 z-20 px-3 py-1.5 rounded-full bg-white/90 hover:bg-white text-text-primary text-xs font-medium shadow-sm border border-border-subtle transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-orange"
+                aria-label="Passer l'animation"
+              >
+                Passer l'animation
+              </button>
+
+              <video
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                poster="/images/nomira-intro-poster.jpg"
+                width={1280}
+                height={720}
+                aria-hidden="true"
+                onEnded={handleVideoEnd}
+                onError={skip}
+                className="w-full h-full object-contain"
+              >
+                <source src="/videos/nomira-intro.webm" type="video/webm" />
+                <source src="/videos/nomira-intro.mp4" type="video/mp4" />
+              </video>
+            </div>
+          )}
         </div>
 
         {/* Boutons CTA */}
