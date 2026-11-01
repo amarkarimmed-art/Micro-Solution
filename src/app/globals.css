@@ -70,6 +70,8 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 4rem;
   font-family: var(--font-sans);
   color: var(--color-primary);
   background-color: var(--color-white);
@@ -88,6 +90,26 @@ body {
   overflow-x: hidden;
   overscroll-behavior-y: none;
 }
+
+/* Défilement par sections (scroll snap) */
+main > section,
+#hero,
+#constat,
+#parcours,
+#avantage,
+#solutions,
+#financement,
+#pourquoi,
+#faq,
+#contact {
+  scroll-snap-align: start;
+}
+
+footer,
+#footer {
+  scroll-snap-align: none;
+}
+
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
@@ -231,6 +253,9 @@ textarea:focus-visible {
 
 /* Accessibility reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none !important;
+  }
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
